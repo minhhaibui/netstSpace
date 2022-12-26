@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./singn_up.css" />
+  </head>
+  <body>
+    <div class="container">
+      <form action="" class="form_signUp">
+        <h2 class="signUp_title">sign UP</h2>
+        <input type="email" class="email" placeholder="email" required />
+        <input type="text" class="userName" placeholder="userName" required />
+        <input
+          type="password"
+          class="password"
+          placeholder="passoword"
+          required
+        />
+        <input
+          type="password"
+          class="confirmPassword"
+          placeholder="confirm password"
+        />
+        <a href="./login.html" class="btn_login">login</a>
+        <button class="signup btn btn-primary">sign up</button>
+      </form>
+    </div>
+    <script>
+      let i = 0;
+
+      //ham kiem tra xem có trung tai khoan k
+      function checkUser(user) {
+        for (let i = 0; i < localStorage.length; i++) {
+          if (localStorage.key(i) === user) {
+            return true;
+          }
+        }
+      }
+      //kiem tra trung email
+      let check = false;
+      function checkEmail(em) {
+        let arrUser = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          arrUser.push(localStorage.key(i));
+        }
+        arrUser.forEach((item) => {
+          let data = JSON.parse(localStorage.getItem(item));
+
+          console.log(data.email);
+          if (data.email === em) {
+            check = true;
+          }
+        });
+      }
+      // checkEmail("dung@567");
+
+      console.log(check);
+
+      function signUp(e) {
+        e.preventDefault();
+
+        const userName = document.querySelector(".userName").value;
+        const password = document.querySelector(".password").value;
+        const email = document.querySelector(".email").value;
+        const confirmpassword =
+          document.querySelector(".confirmPassword").value;
+
+        let account = {
+          email: email,
+          userName: userName,
+          password: password,
+        };
+        checkEmail(email);
+
+        if (check == true) {
+          window.location.reload();
+          return alert("email đã dc đăng ky");
+        } else if (checkUser(userName)) {
+          return alert("tài Khoản đã tồn tại");
+        } else if (
+          userName === "" ||
+          password === "" ||
+          email === "" ||
+          confirmpassword === ""
+        ) {
+          return alert("không được bỏ trống ô");
+        } else if (password !== confirmpassword) {
+          return alert("confirm password không hợp lệ");
+        } else {
+          let json = JSON.stringify(account);
+          localStorage.setItem(userName, json);
+          alert("đăng ký thành công");
+
+          window.location = "./login.html";
+        }
+      }
+      const form_signUp = document.querySelector(".form_signUp");
+      form_signUp.addEventListener("submit", signUp);
+    </script>
+  </body>
+</html>
